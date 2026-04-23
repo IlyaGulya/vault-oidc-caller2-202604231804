@@ -1,0 +1,24 @@
+name: Direct vault-action (should be denied by signer-reusable role)
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/vault-action@v3
+        with:
+          url: https://af64-95-47-192-215.ngrok-free.app
+          method: jwt
+          path: github
+          role: signer-reusable
+          secrets: |
+            secret/data/release-artifacts api_key | API_KEY
