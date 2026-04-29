@@ -1,4 +1,4 @@
-name: Direct vault-action (should be denied by signer-reusable role)
+name: Direct vault-action (must be denied)
 
 on:
   pull_request:
@@ -9,16 +9,15 @@ permissions:
   id-token: write
 
 jobs:
-  direct:
+  attempt:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
       - uses: hashicorp/vault-action@v3
         with:
           url: https://af64-95-47-192-215.ngrok-free.app
           method: jwt
-          path: github
-          role: signer-reusable
+          path: ci
+          role: ci-mobile-register-build
           secrets: |
-            secret/data/release-artifacts api_key | API_KEY
+            ci/data/mobile/release/dev-platform-xauth x_auth | DEV_PLATFORM_XAUTH
